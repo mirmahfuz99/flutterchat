@@ -1,38 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutterchat/signin.dart';
-import 'package:flutterchat/signup.dart';
+import 'package:flutterchat/home.dart';
+import 'package:flutterchat/login_page.dart';
 
 
-void main() {
-  runApp(HomeScreen());
-}
 
-class HomeScreen extends StatelessWidget {
+void main() => runApp(new MyApp());
+
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          appBar: AppBar(
-            bottom: TabBar(
-              tabs: [
-                Tab(text: 'Sign Up',),
-                Tab(text: 'Sign In',),
-              ],
-            ),
-            title: Text('Chat Project'),
-          ),
-          body: TabBarView(
-            children: [
-              new SignUp(),
-              new SignIn(),
-
-            ],
-          ),
-        ),
+    return new MaterialApp(
+      title: 'TheGorgeousLogin',
+      theme: new ThemeData(
+        primarySwatch: Colors.blue,
       ),
+     home: new LoginPage(),
+      //home: new HomePage(),
     );
   }
-
 }
