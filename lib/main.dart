@@ -38,6 +38,8 @@ class MainScreenState extends State<MainScreen> {
     return Future.value(false);
   }
 
+  //Open Dialog Popup
+
   Future<Null> openDialog() async {
     switch (await showDialog(
         context: context,
@@ -128,6 +130,8 @@ class MainScreenState extends State<MainScreen> {
     }
   }
 
+  //user/friends row in Main screen
+
   Widget buildItem(BuildContext context, DocumentSnapshot document) {
     if (document['id'] == currentUserId) {
       return Container();
@@ -203,6 +207,7 @@ class MainScreenState extends State<MainScreen> {
 
   final GoogleSignIn googleSignIn = new GoogleSignIn();
 
+  //Menu Item Pressed
   void onItemMenuPress(Choice choice) {
     if (choice.title == 'Log out') {
       handleSignOut();
@@ -212,6 +217,7 @@ class MainScreenState extends State<MainScreen> {
     }
   }
 
+  //Sign Out Firebase
   Future<Null> handleSignOut() async {
     this.setState(() {
       isLoading = true;
