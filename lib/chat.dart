@@ -10,6 +10,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 
 class Chat extends StatelessWidget {
@@ -52,6 +53,8 @@ class ChatScreen extends StatefulWidget {
 class ChatScreenState extends State<ChatScreen> {
   ChatScreenState({Key key, @required this.peerId, @required this.peerAvatar});
 
+  DatabaseReference databaseReference;
+
   String peerId;
   String peerAvatar;
   String id;
@@ -73,6 +76,7 @@ class ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
+    databaseReference = FirebaseDatabase.instance.reference().child("messages");
     focusNode.addListener(onFocusChange);
 
     groupChatId = '';
@@ -144,6 +148,8 @@ class ChatScreenState extends State<ChatScreen> {
     if (content.trim() != '') {
       textEditingController.clear();
 
+
+
       var documentReference = Firestore.instance
           .collection('messages')
           .document(groupChatId)
@@ -161,6 +167,15 @@ class ChatScreenState extends State<ChatScreen> {
             'type': type
           },
         );
+
+        // Add Data to firebase data base
+        databaseReference.push().set({
+          'idFrom':id,
+          'idTo':peerId,
+          'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
+          'content': content,
+          'type': type
+        });
       });
       listScrollController.animateTo(0.0,
           duration: Duration(milliseconds: 300), curve: Curves.easeOut);
