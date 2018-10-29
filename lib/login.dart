@@ -94,8 +94,6 @@ class LoginScreenState extends State<LoginScreen> {
 
 
 
-
-
       final List<DocumentSnapshot> documents = result.documents;
       if (documents.length == 0) {
         //Add data to Firebase database if new User
