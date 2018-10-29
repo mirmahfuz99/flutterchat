@@ -8,6 +8,7 @@ import 'package:flutterchat/main.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -35,6 +36,7 @@ class LoginScreen extends StatefulWidget {
 class LoginScreenState extends State<LoginScreen> {
   final GoogleSignIn googleSignIn = new GoogleSignIn();
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  DatabaseReference databaseReference;
   SharedPreferences prefs;
 
   bool isLoading = false;
@@ -45,6 +47,7 @@ class LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     isSignedIn();
+    databaseReference = FirebaseDatabase.instance.reference().child("users");
   }
 
   void isSignedIn() async {
@@ -88,9 +91,21 @@ class LoginScreenState extends State<LoginScreen> {
           .collection('users')
           .where('id', isEqualTo: firebaseUser.uid)
           .getDocuments();
+
+
+
+
+
       final List<DocumentSnapshot> documents = result.documents;
       if (documents.length == 0) {
-        // Update data to server if new user
+        //Add data to Firebase database if new User
+        databaseReference.push().set({
+          'nickname': firebaseUser.displayName,
+          'photoUrl': firebaseUser.photoUrl,
+          'id': firebaseUser.uid
+        });
+
+        // Update data to Cloud Firestore if new user
         Firestore.instance
             .collection('users')
             .document(firebaseUser.uid)
